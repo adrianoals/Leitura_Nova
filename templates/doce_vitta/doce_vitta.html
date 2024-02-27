@@ -1,0 +1,79 @@
+{% extends 'doce_vitta/base.html' %}
+{% load static %}
+{% block content %}
+        <main>
+            <div class="row mt-5 margem-up">
+                <div class="col-md-3">
+                </div> 
+
+                <div class="col-md-6 text-center purpleground">
+                        <h1 class="mt-5 mb-5">INFORME OS DADOS DE SUA LEITURA</h1>
+                </div>
+                {% if messages %}
+                    <div class="alert-messages">
+                        {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} text-center font-style">
+                            {{ message }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
+                <div class="col-md-3">
+                </div>
+            </div>
+
+            <div class="row mt-0">
+                <div class="col-md-3">
+                </div>
+
+                <div class="col-md-6 blueground">
+                    <form class="mx-5 my-5" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {% comment %} <label for="bloco" class="form-label font-style">BLOCO</label>
+                            <select class="form-select font-style" id="bloco" name="bloco" required>
+                                <option value="">Selecione seu bloco</option>
+                                {% for bloco in blocos %}
+                                    <option value="{{ bloco.id }}">{{ bloco.bloco }}</option>
+                                {% endfor %} {% endcomment %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apartamento" class="form-label font-style">APARTAMENTO</label>
+                            <select class="form-select font-style" id="apartamento" name="apartamento" required>
+                                <option value="">Selecione seu apartamento</option>
+                                {% for apt in apartamentos %}
+                                    <option value="{{ apt.id }}">{{ apt.apartamento }} - Bloco {{ apt.bloco }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="leitura" class="form-label font-style">INFORME SUA LEITURA</label>
+                            <input type="text" class="form-control font-style" id="leitura" name="valor_leitura" placeholder="00000.00">
+                        </div>
+                        <div class="mb-3">
+                            <label for="foto_relogio" class="form-label font-style">ANEXE A FOTO DO SEU RELÓGIO DE GÁS</label>
+                            <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio">
+                        </div> 
+               
+                        <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
+                        
+                    </form>
+                </div>
+                
+                <div class="col-md-3">
+                </div>
+            </div>
+            
+            <div class="container row-x">
+                <div class="row">
+                    <div class="col-md-12">
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+        
+        {% endblock %}

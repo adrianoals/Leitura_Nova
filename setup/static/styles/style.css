@@ -1,0 +1,141 @@
+body {
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    background-image: url('/static/assets/images/banneragua1.png');
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    visibility: inherit;
+    z-index: 20;
+    position: relative; /* Mudado de absolute para relative */
+
+    /* font-family: 'Poppins', sans-serif; */
+    /* font-weight: 600; */
+    
+    font-family: 'Kanit', sans-serif;
+    font-weight: 100;
+    font-size: 12px;
+    padding-top: 100px; /* Espaço adicional no topo para não sobrepor conteúdo */
+}
+
+
+.font-style {
+    font-family: 'Kanit', sans-serif;
+    font-weight: 100;
+    font-size: 23px;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0; /* Garante que o header inicie no canto esquerdo */
+    width: 100%;
+    z-index: 1050; /* Z-index alto para ficar sobre outros elementos */
+    background-color: rgba(14, 88, 162, 0.4); /* Fundo semi-transparente */
+}
+
+main {
+    margin: 0;
+    padding: 0;
+    margin-top: 100px;
+}
+
+.row-x{
+    margin: 15px;
+    padding: 15px;
+}
+
+.margem-up{
+    padding-top: 80px;
+}
+
+.blueground{
+    margin: 0;
+    padding: 0;
+    /* background-color: #0E58A2; */
+    background-color: rgba(14, 88, 162, 0.9);
+    border: 2px solid #000;
+    border-radius: 15px;
+}
+
+
+h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 50px;
+    font-weight: 100;
+}
+
+h5 {
+    font-family: 'Kanit', sans-serif;
+    font-size: 25px;
+    font-weight: 100;
+}
+
+.footer-font{
+    font-family: 'Kanit', sans-serif;
+    font-size: 15px;
+    font-weight: 100;
+}
+
+
+/* Estilo dos links */
+
+/* Estilo padrão para os links */
+.nav-link {
+    color: #FFFFFF;
+    font-size: 17px;
+    
+}
+
+/* Estilo ao passar o mouse */
+.nav-link:hover {
+    color: #F06129; 
+}
+
+/* Estilo ao clicar */
+.nav-link:active {
+    color: #F06129;
+} 
+
+
+/* Estilo para o link em foco */
+.nav-link:focus {
+    color: #F06129;
+}
+
+
+
+.texto-margem{
+    /* margin-top: 500px; */
+    padding-top: 80px;
+}
+
+.btn-yellow {
+    /* background-color: #EFB000; */
+    /* color: #5E17EB; */
+    background-color: #F06129;
+    color: black;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.wh-100 {
+    height: 120px !important;
+    width: 120px !important; 
+}
+
+
+.placeholder-option option {
+    color: gray; /* Cor similar a de um placeholder */
+}
+
+/* Estilizar opções não-placeholder */
+.placeholder-option option:not(:first-child) {
+    color: black; /* Cor padrão para as opções */
+}
+
+
+
