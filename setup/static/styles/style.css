@@ -19,6 +19,8 @@ body {
     font-weight: 100;
     font-size: 12px;
     padding-top: 100px; /* Espaço adicional no topo para não sobrepor conteúdo */
+
+
 }
 
 
@@ -51,6 +53,7 @@ main {
 .margem-up{
     padding-top: 80px;
 }
+
 
 .blueground{
     margin: 0;
@@ -137,5 +140,10 @@ h5 {
     color: black; /* Cor padrão para as opções */
 }
 
-
-
+.btn-erro {
+    display: inline-block; /* Garante que o botão se comporte como um elemento de bloco inline */
+    padding: 10px 20px; /* Ajuste conforme necessário para acomodar o texto dentro do botão */
+    text-align: center; /* Centraliza o texto no botão */
+    border-radius: 50%; /* Mantém as bordas arredondadas */
+    text-decoration: none; /* Remove o sublinhado do link */
+}

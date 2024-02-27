@@ -30,7 +30,7 @@ def rename_file(instance, filename):
 class Leitura(models.Model):
     apartamento = models.ForeignKey(Apartamento, on_delete=models.CASCADE)
     data_leitura = models.DateField()
-    valor_leitura = models.DecimalField(max_digits=10, decimal_places=2)
+    valor_leitura = models.DecimalField(max_digits=8, decimal_places=3)
     foto_relogio = models.ImageField(upload_to=rename_file, blank=True, null=True)
 
     def __str__(self):

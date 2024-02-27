@@ -2,32 +2,33 @@
 {% load static %}
 {% block content %}
         <main>
-            <div class="row mt-5 margem-up">
-                <div class="col-md-3">
-                </div> 
-
-                <div class="col-md-6 text-center purpleground">
-                        <h1 class="mt-5 mb-5">INFORME OS DADOS DE SUA LEITURA</h1>
-                </div>
-                {% if messages %}
-                    <div class="alert-messages">
-                        {% for message in messages %}
+            {% if messages %}
+                <div class="alert-messages margem-up">
+                    {% for message in messages %}
                         <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} text-center font-style">
                             {{ message }}
                         </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
 
+            <div class="">
+                <div class="row mt-5 margem-up">
+                    <div class="col-md-3">
+                    </div> 
+                <div class="col-md-6 text-center purpleground">
+                    <h1 class="mt-5 mb-5">INFORME OS DADOS DE SUA LEITURA</h1>
+                </div>
+                
                 <div class="col-md-3">
                 </div>
             </div>
-
+            
             <div class="row mt-0">
                 <div class="col-md-3">
                 </div>
-
+                
                 <div class="col-md-6 blueground">
                     <form class="mx-5 my-5" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -36,7 +37,7 @@
                             <select class="form-select font-style" id="bloco" name="bloco" required>
                                 <option value="">Selecione seu bloco</option>
                                 {% for bloco in blocos %}
-                                    <option value="{{ bloco.id }}">{{ bloco.bloco }}</option>
+                                <option value="{{ bloco.id }}">{{ bloco.bloco }}</option>
                                 {% endfor %} {% endcomment %}
                             </select>
                         </div>
@@ -45,20 +46,26 @@
                             <select class="form-select font-style" id="apartamento" name="apartamento" required>
                                 <option value="">Selecione seu apartamento</option>
                                 {% for apt in apartamentos %}
-                                    <option value="{{ apt.id }}">{{ apt.apartamento }} - Bloco {{ apt.bloco }}</option>
+                                <option value="{{ apt.id }}">{{ apt.apartamento }} - Bloco {{ apt.bloco }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="leitura" class="form-label font-style">INFORME SUA LEITURA</label>
-                            <input type="text" class="form-control font-style" id="leitura" name="valor_leitura" placeholder="00000.00">
+                            <input type="text" class="form-control font-style" id="leitura" name="valor_leitura" placeholder="00000.000  (Obs: Preencha com '.' máximo de 8 números permitidos)">
                         </div>
                         <div class="mb-3">
                             <label for="foto_relogio" class="form-label font-style">ANEXE A FOTO DO SEU RELÓGIO DE GÁS</label>
                             <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio">
                         </div> 
-               
-                        <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
+                
+                        <h5 class="text-center mt-5">Por favor verique os dados antes de enviar!</h5>
+
+                        <div class="d-flex justify-content-center">
+                            <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
+                        </div>
+                        
+                        {% comment %} <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button> {% endcomment %}
                         
                     </form>
                 </div>
@@ -73,7 +80,6 @@
                     </div>
                 </div>
             </div>
-            
-        </main>
-        
+        </div>
+        </main>        
         {% endblock %}
