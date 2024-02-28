@@ -2,7 +2,7 @@ body {
     color: #FFFFFF;
     margin: 0;
     padding: 0;
-    background-image: url('/assets/images/banneragua1.png');
+    background-image: url('/static/assets/images/banneragua1.png');
     background-size: cover;
     background-position: center center;
     width: 100%;
@@ -19,6 +19,8 @@ body {
     font-weight: 100;
     font-size: 12px;
     padding-top: 100px; /* Espaço adicional no topo para não sobrepor conteúdo */
+
+
 }
 
 
@@ -49,8 +51,9 @@ main {
 }
 
 .margem-up{
-    padding-top: 80px;
+    padding-top: 60px;
 }
+
 
 .blueground{
     margin: 0;
@@ -128,4 +131,19 @@ h5 {
 }
 
 
+.placeholder-option option {
+    color: gray; /* Cor similar a de um placeholder */
+}
 
+/* Estilizar opções não-placeholder */
+.placeholder-option option:not(:first-child) {
+    color: black; /* Cor padrão para as opções */
+}
+
+.btn-erro {
+    display: inline-block; /* Garante que o botão se comporte como um elemento de bloco inline */
+    padding: 10px 20px; /* Ajuste conforme necessário para acomodar o texto dentro do botão */
+    text-align: center; /* Centraliza o texto no botão */
+    border-radius: 50%; /* Mantém as bordas arredondadas */
+    text-decoration: none; /* Remove o sublinhado do link */
+}
