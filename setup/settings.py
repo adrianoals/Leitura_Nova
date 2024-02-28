@@ -34,7 +34,8 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 # ALLOWED_HOSTS = []
 
 DEBUG = False
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['3.15.141.27', 'docevitta.leituranova.com.br', 'www.docevitta.leituranova.com.br']
+
 
 
 # Application definition
