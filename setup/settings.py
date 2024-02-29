@@ -30,11 +30,11 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['*']
+# DEBUG = True
+# ALLOWED_HOSTS = ['*']
 
-# DEBUG = False
-# ALLOWED_HOSTS = ['3.15.141.27', 'docevitta.leituranova.com.br', 'www.docevitta.leituranova.com.br']
+DEBUG = False
+ALLOWED_HOSTS = ['3.15.141.27', 'docevitta.leituranova.com.br', 'www.docevitta.leituranova.com.br']
 
 
 
