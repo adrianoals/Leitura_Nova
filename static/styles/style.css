@@ -147,3 +147,8 @@ h5 {
     border-radius: 50%; /* Mantém as bordas arredondadas */
     text-decoration: none; /* Remove o sublinhado do link */
 }
+
+
+.form-control {
+    font-size: 16px; /* Evita zoom no iOS ao focar */
+}
