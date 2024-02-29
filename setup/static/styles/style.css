@@ -147,3 +147,7 @@ h5 {
     border-radius: 50%; /* Mantém as bordas arredondadas */
     text-decoration: none; /* Remove o sublinhado do link */
 }
+
+input, select, textarea, label {
+    font-size: 16px;
+}
