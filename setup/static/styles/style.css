@@ -30,14 +30,20 @@ body {
     font-size: 23px;
 }
 
+  
 header {
-    position: fixed;
+    /* position: fixed; */
+    position:absolute;
+    left: 0; 
+    /* Garante que o header inicie no canto esquerdo */
     top: 0;
-    left: 0; /* Garante que o header inicie no canto esquerdo */
     width: 100%;
-    z-index: 1050; /* Z-index alto para ficar sobre outros elementos */
-    background-color: rgba(14, 88, 162, 0.4); /* Fundo semi-transparente */
+    /* Z-index alto para ficar sobre outros elementos */
+    /* z-index: 1050;  */
+    /* Fundo semi-transparente */
+    /* background-color: rgba(14, 88, 162, 0.4);  */
 }
+
 
 main {
     margin: 0;
@@ -88,7 +94,8 @@ h5 {
 
 /* Estilo padrão para os links */
 .nav-link {
-    color: #FFFFFF;
+    /* color: #FFFFFF; */
+    color: rgba(14, 88, 162, 0.9);
     font-size: 17px;
     
 }
