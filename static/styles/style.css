@@ -17,7 +17,7 @@ body {
     
     font-family: 'Kanit', sans-serif;
     font-weight: 100;
-    font-size: 12px;
+    font-size: 16px;
     padding-top: 100px; /* Espaço adicional no topo para não sobrepor conteúdo */
 
 
@@ -27,7 +27,7 @@ body {
 .font-style {
     font-family: 'Kanit', sans-serif;
     font-weight: 100;
-    font-size: 23px;
+    font-size: 16px;
 }
 
 header {
