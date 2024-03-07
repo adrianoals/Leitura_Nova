@@ -1,31 +1,21 @@
 from django.db import models
 from django.utils.timezone import now
 
-class Bloco(models.Model):
-    bloco = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.bloco
-
 
 class Apartamento(models.Model):
     apartamento = models.CharField(max_length=100)
-    bloco = models.ForeignKey(Bloco, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.apartamento} - {self.bloco.bloco}"
-
-    class Meta:
-        unique_together = (('apartamento', 'bloco'),)
+        return f"{self.apartamento}"
 
 
 def rename_file(instance, filename):
     # Obter o mês atual
     month = now().strftime('%m')
     # Construir o novo nome do arquivo. Você pode ajustar o formato conforme necessário
-    new_filename = f"Bloco{instance.apartamento.bloco.bloco}_Ap{instance.apartamento.apartamento}_mes{month}.jpg"
+    new_filename = f"Apartamento_{instance.apartamento.apartamento}_{month}/24.jpg"
     # Retornar o caminho completo do novo arquivo
-    return f"leituras/{month}/{new_filename}"
+    return f"leituras/tres_coelho/{month}/{new_filename}"
 
 class Leitura(models.Model):
     apartamento = models.ForeignKey(Apartamento, on_delete=models.CASCADE)
