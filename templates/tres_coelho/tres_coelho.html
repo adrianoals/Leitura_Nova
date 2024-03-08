@@ -13,25 +13,19 @@
             {% endif %}
 
             <div class="container">
-                {% comment %} <div class="row justify-content-center mt-5 margem-up"> {% endcomment %}
-                <div class="row justify-content-center mt-5">
-                    <div class="col-md-8 text-center purpleground">
-                        {% comment %} <h1 class="mt-5 mb-5">CONDOMÍNIO TRÊS COELHO</h1>
-                        <h1 class="my-5 mx-5">INFORME OS DADOS DE SUA LEITURA</h1> {% endcomment %}
-                    </div>
-                </div>
+
                 
                 <div class="row justify-content-center mt-0">
                     <div class="col-md-8 blueground text-center">  
-                        <h5 class="mt-5 mb-5">CONDOMÍNIO TRÊS COELHO</h5>
-                        <h5 class="mx-5 my-5 text-center">LEITURA DE GÁS MARÇO/2024</h5>
-                        <h5 class="my-5 mx-5">INSIRA OS DADOS DE SUA LEITURA</h5>
-                </div>                        
+                            <h5 class="my-5">CONDOMÍNIO TRÊS COELHO</h5>
+                            <h5 class="my-5">LEITURA DE GÁS MARÇO/2024</h5>
+                            <h5 class="my-5">INSIRA OS DADOS DE SUA LEITURA</h5>
+                    </div>                        
 
                 <div class="row justify-content-center mt-0">
                     <div class="col-md-8 blueground">
 
-                        <form class="mx-5 my-5" method="post" enctype="multipart/form-data">
+                        <form class="px-5 py-5" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="mb-3">
                                 <label for="apartamento" class="form-label font-style">APARTAMENTO</label>
