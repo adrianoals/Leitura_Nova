@@ -3,11 +3,15 @@
 # def tres_coelho(request):
 #     	return render(request, 'tres_coelho/tres_coelho.html')
 
-
 from django.shortcuts import render, redirect
 from .models import Apartamento, Leitura
 from django.contrib import messages
 import datetime
+import os
+import zipfile
+from django.http import HttpResponse
+from django.conf import settings
+
 
 def tres_coelho(request):
     if request.method == 'POST':
@@ -26,7 +30,7 @@ def tres_coelho(request):
                 data_leitura=datetime.date.today(),  # Supondo que a data da leitura é sempre o dia atual
                 foto_relogio=foto_relogio
             )
-            messages.success(request, 'Leitura enviada com sucesso!')
+            messages.success(request, 'Leitura enviada com sucesso! Obrigado!')
             return redirect('/ok')
         except Exception as e:
             # Aqui você pode definir uma mensagem de erro com base na exceção
@@ -38,10 +42,6 @@ def tres_coelho(request):
     return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
 
-import os
-import zipfile
-from django.http import HttpResponse
-from django.conf import settings
 
 def download_photos(request):
     # Diretório onde as fotos estão armazenadas
