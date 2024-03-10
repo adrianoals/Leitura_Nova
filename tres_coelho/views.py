@@ -38,6 +38,41 @@ def tres_coelho(request):
     return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
 
+import os
+import zipfile
+from django.http import HttpResponse
+from django.conf import settings
+
+def download_photos(request):
+    # Diretório onde as fotos estão armazenadas
+    photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/tres_coelho/03')
+    
+    # Lista de caminhos completos para todas as fotos
+    photo_paths = [os.path.join(photos_directory, photo) for photo in os.listdir(photos_directory)]
+    
+    # Configurar um objeto ZipFile em memória
+    memory_zip = zipfile.ZipFile('photos.zip', 'w', zipfile.ZIP_DEFLATED)
+
+    # Adicionar todas as fotos ao arquivo zip
+    for photo_path in photo_paths:
+        memory_zip.write(photo_path, os.path.basename(photo_path))
+
+    # Fechar o arquivo zip
+    memory_zip.close()
+
+    # Criar uma resposta HTTP com o arquivo zip em memória
+    response = HttpResponse(open('photos.zip', 'rb'), content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename=photos.zip'
+
+    # Remover o arquivo zip em memória após o envio
+    os.remove('photos.zip')
+
+    return response
+
+
+
+
+
 # from django.shortcuts import render, redirect
 # from .models import Apartamento
 # from .forms import LeituraForm  # Certifique-se de importar LeituraForm

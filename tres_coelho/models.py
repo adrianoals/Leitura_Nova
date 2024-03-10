@@ -13,7 +13,7 @@ def rename_file(instance, filename):
     # Obter o mês atual
     month = now().strftime('%m')
     # Construir o novo nome do arquivo. Você pode ajustar o formato conforme necessário
-    new_filename = f"Apartamento_{instance.apartamento.apartamento}_{month}/24.jpg"
+    new_filename = f"{instance.apartamento.apartamento}_mês_{month}.jpg"
     # Retornar o caminho completo do novo arquivo
     return f"leituras/tres_coelho/{month}/{new_filename}"
 
