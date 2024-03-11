@@ -61,5 +61,3 @@ def tres_coelho(request):
 
 #     apartamentos = Apartamento.objects.all()
 #     return render(request, 'tres_coelho/tres_coelho.html', {'form': form, 'apartamentos': apartamentos})
-
-
