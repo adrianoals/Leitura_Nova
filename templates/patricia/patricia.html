@@ -29,7 +29,7 @@
 
                         <form class="px-5" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
-                            <div class="mb-3">
+                            <div class="mb-5">
                                 <label for="apartamento" class="form-label font-style">APARTAMENTO</label>
                                 <select class="form-select font-style" id="apartamento" name="apartamento" required>
                                     <option value="">Selecione seu apto</option>
@@ -39,26 +39,26 @@
                                 </select>
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-0">
                                 <label for="leitura" class="form-label font-style">RELÓGIO COZINHA</label>
                                 <input type="text" class="form-control font-style" id="leitura" name="valor_leitura_cozinha" placeholder="00000.000" pattern="^\d{0,5}(\.\d{1,3})?$" title="Por favor, insira até 5 dígitos antes do ponto e até 3 dígitos após o ponto.">
                                 <span class="text-warning">00000.000 (Preencha nesse formato)</span>
                                 <p class="text-warning">Para separar os números em vermelho de seu relógio utilize " . "<p>                                
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-5">
                                 <label for="foto_relogio_cozinha" class="form-label font-style">ANEXE A FOTO RELÓGIO COZINHA</label>
                                 <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio_cozinha">
                             </div>
                             
-                            <div class="mb-3">
+                            <div class="mb-0">
                                 <label for="leitura" class="form-label font-style">RELÓGIO BANHEIRO</label>
                                 <input type="text" class="form-control font-style" id="leitura" name="valor_leitura_banheiro" placeholder="00000.000" pattern="^\d{0,5}(\.\d{1,3})?$" title="Por favor, insira até 5 dígitos antes do ponto e até 3 dígitos após o ponto.">
                                 <span class="text-warning">00000.000 (Preencha nesse formato)</span>
                                 <p class="text-warning">Para separar os números em vermelho de seu relógio utilize " . "<p>                                
                             </div>
 
-                            <div class="mb-3">
+                            <div class="mb-5">
                                 <label for="foto_relogio_cozinha" class="form-label font-style">ANEXE A FOTO RELÓGIO BANHEIRO</label>
                                 <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio_banheiro">
                             </div>
