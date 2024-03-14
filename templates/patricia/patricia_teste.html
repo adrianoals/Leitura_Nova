@@ -1,0 +1,86 @@
+{% extends 'doce_vitta/base.html' %}
+{% load static %}
+{% block content %}
+        <main>
+            {% if messages %}
+            <div class="alert-messages margem-up">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} text-center font-style">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="container">
+
+                <form class="px-5" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row justify-content-center mt-0">
+                        <div class="col-md-8 blueground text-center">  
+                                <h5 class="my-5">CONDOMÍNIO PATRICIA</h5>
+                                <h5 class="my-5">LEITURA DE ÁGUA MARÇO/2024</h5>
+                        </div>                        
+                    </div>                        
+                                
+                                
+                    <div class="row justify-content-center mt-0">
+                        <div class="col-md-8 blueground">
+                            <h5 class="mt-5 mb-5 text-center">INSIRA OS DADOS DE SUA LEITURA</h5>
+                                <div class="mb-5 px-5 py-5">
+                                    <label for="apartamento" class="form-label font-style">APARTAMENTO</label>
+                                    <select class="form-select font-style" id="apartamento" name="apartamento" required>
+                                        <option value="">Selecione seu apto</option>
+                                        {% for apt in apartamentos %}
+                                        <option value="{{ apt.id }}">{{ apt.apartamento }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-0">
+                        <div class="col-md-8 blueground">  
+                            <div class="px-5 mt-5">
+                                <h5 class="text-center">RELÓGIO DE ÁGUA COZINHA</h5>
+                                <label for="leitura" class="form-label font-style mt-5">INFORME SUA LEITURA</label>
+                                <input type="text" class="form-control font-style" id="leitura" name="valor_leitura_cozinha" placeholder="00000.000" pattern="^\d{0,5}(\.\d{1,3})?$" title="Por favor, insira até 5 dígitos antes do ponto e até 3 dígitos após o ponto.">
+                                <span class="text-warning">00000.000 (Preencha nesse formato)</span>
+                                <p class="text-warning">Para separar os números em vermelho de seu relógio utilize " . "<p>                                
+                            </div>
+
+                            <div class="mb-5 px-5">
+                                <label for="foto_relogio_cozinha" class="form-label font-style">ANEXE A FOTO RELÓGIO COZINHA</label>
+                                <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio_cozinha">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center mt-0">
+                        <div class="col-md-8 blueground">    
+                            <div class="mt-5 px-5">
+                                <h5 class="text-center">RELÓGIO DE ÁGUA BANHEIRO</h5>
+                                <label for="leitura" class="form-label font-style mt-5">RELÓGIO BANHEIRO</label>
+                                <input type="text" class="form-control font-style" id="leitura" name="valor_leitura_banheiro" placeholder="00000.000" pattern="^\d{0,5}(\.\d{1,3})?$" title="Por favor, insira até 5 dígitos antes do ponto e até 3 dígitos após o ponto.">
+                                <span class="text-warning">00000.000 (Preencha nesse formato)</span>
+                                <p class="text-warning">Para separar os números em vermelho de seu relógio utilize " . "<p>                                
+                            </div>
+
+                            <div class="mb-5 px-5">
+                                <label for="foto_relogio_cozinha" class="form-label font-style">ANEXE A FOTO RELÓGIO BANHEIRO</label>
+                                <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio_banheiro">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center mt-0">
+                        <div class="col-md-8 blueground"> 
+                            <h5 class="text-center mt-5">Por favor verifique os dados antes de enviar!</h5>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
+                            </div>
+                        </div>
+                    </div>
+                </form> 
+            </div>
+        </main>
+{% endblock %}
