@@ -13,14 +13,17 @@
             {% endif %}
 
             <div class="container">
-                <div class="row justify-content-center mt-5 margem-up">
-                    <div class="col-md-8 text-center purpleground">
-                        <h1 class="mt-5 mb-5">INFORME OS DADOS DE SUA LEITURA</h1>
-                    </div>
-                </div>
+
+                <div class="row justify-content-center mt-0">
+                    <div class="col-md-8 blueground text-center">  
+                            <h5 class="my-5">CONDOMÍNIO DOLCE VITA</h5>
+                            <h5 class="my-5">LEITURA DE GÁS MARÇO/2024</h5>
+                    </div>                        
+                </div> 
 
                 <div class="row justify-content-center mt-0">
                     <div class="col-md-8 blueground">
+                        <h5 class="mt-5 mb-5 text-center">INSIRA OS DADOS DE SUA LEITURA</h5>
                         <form class="mx-5 my-5" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="mb-3">

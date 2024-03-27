@@ -42,7 +42,6 @@ def tres_coelho(request):
     return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
 
-
 def download_photos(request):
     # Diretório onde as fotos estão armazenadas
     photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/tres_coelho/03')
