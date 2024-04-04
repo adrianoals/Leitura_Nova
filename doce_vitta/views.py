@@ -48,28 +48,37 @@ def doce_vitta_erro(request):
 
 
 
+import os
+import zipfile
+from django.http import HttpResponse
+from django.conf import settings
+
 def dv_download_photos(request):
     # Diretório onde as fotos estão armazenadas
     photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita/03')
     
     # Lista de caminhos completos para todas as fotos
-    photo_paths = [os.path.join(photos_directory, photo) for photo in os.listdir(photos_directory)]
+    photo_paths = [os.path.join(photos_directory, photo) for photo in os.listdir(photos_directory) if os.path.isfile(os.path.join(photos_directory, photo))]
+    
+    # Verificar se o número de arquivos esperado está presente
+    if len(photo_paths) != 96:
+        return HttpResponse(f"Erro: Número esperado de arquivos não encontrado. Encontrado: {len(photo_paths)}")
     
     # Configurar um objeto ZipFile em memória
-    memory_zip = zipfile.ZipFile('photos.zip', 'w', zipfile.ZIP_DEFLATED)
+    with zipfile.ZipFile('photos.zip', 'w', zipfile.ZIP_DEFLATED) as memory_zip:
+        # Adicionar todas as fotos ao arquivo zip
+        for photo_path in photo_paths:
+            try:
+                memory_zip.write(photo_path, os.path.basename(photo_path))
+            except Exception as e:
+                return HttpResponse(f"Erro ao adicionar o arquivo ao ZIP: {e}")
+    
+    # Criar uma resposta HTTP com o arquivo zip
+    with open('photos.zip', 'rb') as zip_file:
+        response = HttpResponse(zip_file, content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=photos.zip'
 
-    # Adicionar todas as fotos ao arquivo zip
-    for photo_path in photo_paths:
-        memory_zip.write(photo_path, os.path.basename(photo_path))
-
-    # Fechar o arquivo zip
-    memory_zip.close()
-
-    # Criar uma resposta HTTP com o arquivo zip em memória
-    response = HttpResponse(open('photos.zip', 'rb'), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename=photos.zip'
-
-    # Remover o arquivo zip em memória após o envio
+    # Remover o arquivo zip após a criação da resposta
     os.remove('photos.zip')
 
     return response
