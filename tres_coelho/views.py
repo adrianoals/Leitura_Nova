@@ -38,7 +38,7 @@ from django.conf import settings
 #     return render(request, 'doce_vitta/doce_vitta.html', {'blocos': blocos, 'apartamentos': apartamentos})
 
 
-def dv_download_photos(request):
+def tc_download_photos(request):
     # Caminho base onde as fotos estão armazenadas
     base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/tres_coelho')
     
