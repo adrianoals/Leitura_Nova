@@ -58,11 +58,8 @@ def dv_download_photos(request):
     photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita/03')
     
     # Lista de caminhos completos para todas as fotos
+    # Filtra apenas arquivos para evitar adicionar diretórios
     photo_paths = [os.path.join(photos_directory, photo) for photo in os.listdir(photos_directory) if os.path.isfile(os.path.join(photos_directory, photo))]
-    
-    # Verificar se o número de arquivos esperado está presente
-    if len(photo_paths) != 96:
-        return HttpResponse(f"Erro: Número esperado de arquivos não encontrado. Encontrado: {len(photo_paths)}")
     
     # Configurar um objeto ZipFile em memória
     with zipfile.ZipFile('photos.zip', 'w', zipfile.ZIP_DEFLATED) as memory_zip:
@@ -82,4 +79,3 @@ def dv_download_photos(request):
     os.remove('photos.zip')
 
     return response
-
