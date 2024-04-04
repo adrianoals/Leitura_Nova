@@ -59,7 +59,7 @@ def dv_download_photos(request):
     
     # Preparar um arquivo zip em memória
     response = HttpResponse(content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="photos.zip"'
+    response['Content-Disposition'] = 'attachment; filename="photos_dolce_vita.zip"'
     
     # Criar um arquivo ZipFile diretamente na resposta HTTP
     with zipfile.ZipFile(response, 'w', zipfile.ZIP_DEFLATED) as memory_zip:
