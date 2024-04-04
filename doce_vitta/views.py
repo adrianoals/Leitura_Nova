@@ -55,7 +55,7 @@ from django.conf import settings
 
 def dv_download_photos(request):
     # Diretório onde as fotos estão armazenadas
-    photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita/03')
+    photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita')
     
     # Lista de caminhos completos para todas as fotos
     # Filtra apenas arquivos para evitar adicionar diretórios
