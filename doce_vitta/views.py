@@ -54,28 +54,23 @@ from django.http import HttpResponse
 from django.conf import settings
 
 def dv_download_photos(request):
-    # Diretório onde as fotos estão armazenadas
-    photos_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita')
+    # Caminho base onde as fotos estão armazenadas
+    base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/dolce_vita')
     
-    # Lista de caminhos completos para todas as fotos
-    # Filtra apenas arquivos para evitar adicionar diretórios
-    photo_paths = [os.path.join(photos_directory, photo) for photo in os.listdir(photos_directory) if os.path.isfile(os.path.join(photos_directory, photo))]
+    # Preparar um arquivo zip em memória
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename="photos.zip"'
     
-    # Configurar um objeto ZipFile em memória
-    with zipfile.ZipFile('photos.zip', 'w', zipfile.ZIP_DEFLATED) as memory_zip:
-        # Adicionar todas as fotos ao arquivo zip
-        for photo_path in photo_paths:
-            try:
-                memory_zip.write(photo_path, os.path.basename(photo_path))
-            except Exception as e:
-                return HttpResponse(f"Erro ao adicionar o arquivo ao ZIP: {e}")
-    
-    # Criar uma resposta HTTP com o arquivo zip
-    with open('photos.zip', 'rb') as zip_file:
-        response = HttpResponse(zip_file, content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename=photos.zip'
+    # Criar um arquivo ZipFile diretamente na resposta HTTP
+    with zipfile.ZipFile(response, 'w', zipfile.ZIP_DEFLATED) as memory_zip:
+        # Percorrer diretório e subdiretórios
+        for root, dirs, files in os.walk(base_directory):
+            for file in files:
+                # Construir o caminho completo do arquivo
+                file_path = os.path.join(root, file)
+                # Adicionar arquivo ao zip
+                # Aqui usamos o path relativo para evitar estruturas de diretório absolutas dentro do zip
+                memory_zip.write(file_path, os.path.relpath(file_path, base_directory))
 
-    # Remover o arquivo zip após a criação da resposta
-    os.remove('photos.zip')
-
+    # Não é necessário remover o arquivo zip, pois ele é criado em memória e enviado diretamente na resposta
     return response
