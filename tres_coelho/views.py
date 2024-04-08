@@ -8,34 +8,33 @@ import zipfile
 from django.http import HttpResponse
 from django.conf import settings
 
-# def doce_vitta(request):
-#     if request.method == 'POST':
-#         apartamento_id = request.POST.get('apartamento')
-#         valor_leitura = request.POST.get('valor_leitura')
-#         foto_relogio = request.FILES.get('foto_relogio')
+def tres_coelho(request):
+    if request.method == 'POST':
+        apartamento_id = request.POST.get('apartamento')
+        valor_leitura = request.POST.get('valor_leitura')
+        foto_relogio = request.FILES.get('foto_relogio')
 
-#         try:
-#             if not all([apartamento_id, valor_leitura, foto_relogio]):
-#                 raise ValueError('Todos os campos são obrigatórios.')
+        try:
+            if not all([apartamento_id, valor_leitura, foto_relogio]):
+                raise ValueError('Todos os campos são obrigatórios.')
 
-#             apartamento = Apartamento.objects.get(id=apartamento_id)
-#             Leitura.objects.create(
-#                 apartamento=apartamento,
-#                 valor_leitura=valor_leitura,
-#                 data_leitura=datetime.date.today(),  # Supondo que a data da leitura é sempre o dia atual
-#                 foto_relogio=foto_relogio
-#             )
-#             messages.success(request, 'Leitura enviada com sucesso!')
-#             return redirect('/ok')
-#         except Exception as e:
-#             # Aqui você pode definir uma mensagem de erro com base na exceção
-#             # e passá-la para a página de erro usando a sessão
-#             request.session['error_message'] = str(e)  # Usando sessão
+            apartamento = Apartamento.objects.get(id=apartamento_id)
+            Leitura.objects.create(
+                apartamento=apartamento,
+                valor_leitura=valor_leitura,
+                data_leitura=datetime.date.today(),  # Supondo que a data da leitura é sempre o dia atual
+                foto_relogio=foto_relogio
+            )
+            messages.success(request, 'Leitura enviada com sucesso!')
+            return redirect('/ok')
+        except Exception as e:
+            # Aqui você pode definir uma mensagem de erro com base na exceção
+            # e passá-la para a página de erro usando a sessão
+            request.session['error_message'] = str(e)  # Usando sessão
 
-#     # Se não for uma solicitação POST, exiba a página normalmente
-#     blocos = Bloco.objects.all()
-#     apartamentos = Apartamento.objects.all()
-#     return render(request, 'doce_vitta/doce_vitta.html', {'blocos': blocos, 'apartamentos': apartamentos})
+    # Se não for uma solicitação POST, exiba a página normalmente
+    apartamentos = Apartamento.objects.all()
+    return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
 
 def tc_download_photos(request):
