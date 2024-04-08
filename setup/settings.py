@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'doce_vitta.apps.DoceVittaConfig',
     'tres_coelho.apps.TresCoelhoConfig',
-    'patricia.apps.PatriciaConfig',
 ]
 
 MIDDLEWARE = [
