@@ -7,7 +7,7 @@ import zipfile
 from django.http import HttpResponse
 from django.conf import settings
 
-def tres_coelho(request):
+def alvorada(request):
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
@@ -33,16 +33,16 @@ def tres_coelho(request):
 
     # Se não for uma solicitação POST, exiba a página normalmente
     apartamentos = Apartamento.objects.all()
-    return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
+    return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
 
 
-def tc_download_photos(request):
+def alvorada_download_photos(request):
     # Caminho base onde as fotos estão armazenadas
-    base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/tres_coelho')
+    base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/alvorada')
     
     # Preparar um arquivo zip em memória
     response = HttpResponse(content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="photos_tres_coelho.zip"'
+    response['Content-Disposition'] = 'attachment; filename="photos_alvorada.zip"'
     
     # Criar um arquivo ZipFile diretamente na resposta HTTP
     with zipfile.ZipFile(response, 'w', zipfile.ZIP_DEFLATED) as memory_zip:
