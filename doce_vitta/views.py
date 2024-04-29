@@ -7,6 +7,7 @@ import zipfile
 from django.http import HttpResponse
 from django.conf import settings
 
+
 def doce_vitta(request):
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
@@ -74,3 +75,28 @@ def dv_download_photos(request):
 
     # Não é necessário remover o arquivo zip, pois ele é criado em memória e enviado diretamente na resposta
     return response
+
+import pandas as pd
+from django.views import View
+
+class DownloadExcelView(View):
+    def get(self, request):
+        # Obtendo os dados necessários do modelo Leitura
+        queryset = Leitura.objects.all().values(
+            'apartamento__apartamento', 'apartamento__bloco__bloco', 'data_leitura', 'valor_leitura'
+        )
+        
+        # Criando um DataFrame do pandas com os dados
+        df = pd.DataFrame(list(queryset))
+        
+        # Configurando a resposta HTTP para tipo Excel
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
+        response['Content-Disposition'] = 'attachment; filename="leituras_doce_vita.xlsx"'
+        
+        # Salvando o DataFrame no formato Excel no buffer de resposta
+        with pd.ExcelWriter(response, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Leituras')
+
+        return response
