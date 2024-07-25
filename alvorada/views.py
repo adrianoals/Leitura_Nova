@@ -7,7 +7,7 @@ import zipfile
 from django.http import HttpResponse
 from django.conf import settings
 
-def alvorada(request):
+def imperial(request):
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
@@ -36,7 +36,7 @@ def alvorada(request):
     return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
 
 
-def alvorada_download_photos(request):
+def imperial_download_photos(request):
     # Caminho base onde as fotos estão armazenadas
     base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/alvorada')
     

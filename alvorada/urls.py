@@ -1,8 +1,8 @@
 from django.urls import path
-from alvorada.views import alvorada, alvorada_download_photos
+from alvorada.views import imperial, alvorada_download_photos
 
 urlpatterns = [
-        path('alvorada', alvorada, name='doce_vitta'), 
-        path('alvorda', alvorada_download_photos, name='alvorada_download_photos'),
+        path('imperial', imperial, name='imperial'), 
+        path('dv-imperial', imperial_download_photos, name='imperial_download_photos'),
 ]
 
