@@ -30,9 +30,9 @@
                         <form class="px-5" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label for="apartamento" class="form-label font-style">APARTAMENTO</label>
+                                <label for="apartamento" class="form-label font-style">CASA</label>
                                 <select class="form-select font-style" id="apartamento" name="apartamento" required>
-                                    <option value="">Selecione seu apto</option>
+                                    <option value="">Selecione sua casa</option>
                                     {% for apt in apartamentos %}
                                     <option value="{{ apt.id }}">{{ apt.apartamento }}</option>
                                     {% endfor %}
