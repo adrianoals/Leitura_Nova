@@ -76,26 +76,87 @@ def dv_download_photos(request):
     # Não é necessário remover o arquivo zip, pois ele é criado em memória e enviado diretamente na resposta
     return response
 
+# import pandas as pd
+# from django.views import View
+
+# class DownloadExcelView(View):
+#     def get(self, request):
+#         # Obtendo os dados necessários do modelo Leitura
+#         queryset = Leitura.objects.all().values(
+#             'apartamento__apartamento', 'apartamento__bloco__bloco', 'data_leitura', 'valor_leitura'
+#         )
+        
+#         # Criando um DataFrame do pandas com os dados
+#         df = pd.DataFrame(list(queryset))
+        
+#         # Configurando a resposta HTTP para tipo Excel
+#         response = HttpResponse(
+#             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+#         )
+#         response['Content-Disposition'] = 'attachment; filename="leituras_doce_vita.xlsx"'
+        
+#         # Salvando o DataFrame no formato Excel no buffer de resposta
+#         with pd.ExcelWriter(response, engine='openpyxl') as writer:
+#             df.to_excel(writer, index=False, sheet_name='Leituras')
+
+#         return response
+
 import pandas as pd
+from django.http import HttpResponse
 from django.views import View
 
 class DownloadExcelView(View):
     def get(self, request):
-        # Obtendo os dados necessários do modelo Leitura
-        queryset = Leitura.objects.all().values(
+        # Obter a lista completa de blocos e unidades (do 001 ao 164 para os blocos 02 e 03)
+        blocos = ['01', '02', '03']
+        unidades_por_bloco = {
+            '01': list(range(1, 155)),  # 154 unidades para bloco 01
+            '02': list(range(1, 165)),  # 164 unidades para bloco 02
+            '03': list(range(1, 165)),  # 164 unidades para bloco 03
+        }
+
+        # Criar uma lista completa de apartamentos no formato [bloco] unidade
+        apartamentos_completos = []
+        for bloco, unidades in unidades_por_bloco.items():
+            for unidade in unidades:
+                # Formatar a unidade com 3 dígitos
+                unidade_formatada = f'{unidade:03d}'
+                apartamentos_completos.append(f'[{bloco}] {unidade_formatada}')
+
+        # Obter as leituras existentes no banco de dados
+        leituras_existentes = Leitura.objects.all().values(
             'apartamento__apartamento', 'apartamento__bloco__bloco', 'data_leitura', 'valor_leitura'
         )
-        
-        # Criando um DataFrame do pandas com os dados
-        df = pd.DataFrame(list(queryset))
-        
-        # Configurando a resposta HTTP para tipo Excel
+
+        # Criar um dicionário com as leituras formatadas como [bloco] unidade
+        leituras_dict = {
+            f"[{leitura['apartamento__bloco__bloco']}] {str(leitura['apartamento__apartamento']).zfill(3)}": {
+                'data_leitura': leitura['data_leitura'],
+                'valor_leitura': leitura['valor_leitura']
+            }
+            for leitura in leituras_existentes
+        }
+
+        # Criar a lista de dados a serem inseridos no DataFrame
+        dados = []
+        for apartamento in apartamentos_completos:
+            leitura = leituras_dict.get(apartamento, {'data_leitura': None, 'valor_leitura': None})
+            dados.append({
+                'Apartamento': apartamento,
+                'Data Leitura': leitura['data_leitura'],
+                'Valor Leitura': leitura['valor_leitura']
+            })
+
+        # Criar o DataFrame
+        df = pd.DataFrame(dados)
+
+        # Configurar a resposta HTTP para tipo Excel
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
-        response['Content-Disposition'] = 'attachment; filename="leituras_doce_vita.xlsx"'
-        
-        # Salvando o DataFrame no formato Excel no buffer de resposta
+        response['Content-Disposition'] = 'attachment; filename="leituras_completas_doce_vita.xlsx"'
+
+        # Salvar o DataFrame no formato Excel
         with pd.ExcelWriter(response, engine='openpyxl') as writer:
             df.to_excel(writer, index=False, sheet_name='Leituras')
 
