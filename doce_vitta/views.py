@@ -107,46 +107,43 @@ from django.views import View
 
 class DownloadExcelView(View):
     def get(self, request):
-        # Definir os blocos e apartamentos por andar para cada bloco
-        blocos = ['01', '02', '03']
+        # Obter todos os apartamentos da tabela Apartamento
+        apartamentos = Apartamento.objects.all().values(
+            'apartamento', 'bloco__bloco'
+        )
 
-        # Definir as unidades por bloco seguindo o padrão [andar][unidade]
-        unidades_por_bloco = {
-            '01': [f'{andar}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 001 a 154
-            '02': [f'{andar}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 001 a 164
-            '03': [f'{andar}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 001 a 164
-        }
-
-        # Criar uma lista completa de apartamentos no formato [bloco] unidade
-        apartamentos_completos = []
-        for bloco, unidades in unidades_por_bloco.items():
-            for unidade in unidades:
-                # Formatar a unidade no formato correto
-                apartamentos_completos.append(f'[{bloco}] {unidade}')
-
-        # Obter as leituras existentes no banco de dados
-        leituras_existentes = Leitura.objects.all().values(
+        # Obter todas as leituras
+        leituras = Leitura.objects.all().values(
             'apartamento__apartamento', 'apartamento__bloco__bloco', 'data_leitura', 'valor_leitura'
         )
 
-        # Criar um dicionário com as leituras formatadas como [bloco] unidade
-        leituras_dict = {
-            f"[{leitura['apartamento__bloco__bloco']}] {leitura['apartamento__apartamento']}": {
-                'data_leitura': leitura['data_leitura'],
-                'valor_leitura': leitura['valor_leitura']
-            }
-            for leitura in leituras_existentes
-        }
-
-        # Criar a lista de dados a serem inseridos no DataFrame
+        # Criar uma lista de dicionários contendo todos os apartamentos e as leituras (se houver)
         dados = []
-        for apartamento in apartamentos_completos:
-            leitura = leituras_dict.get(apartamento, {'data_leitura': None, 'valor_leitura': None})
-            dados.append({
-                'Apartamento': apartamento,
-                'Data Leitura': leitura['data_leitura'],
-                'Valor Leitura': leitura['valor_leitura']
-            })
+
+        # Iterar sobre todos os apartamentos
+        for apartamento in apartamentos:
+            # Filtrar as leituras para o apartamento atual
+            leituras_apartamento = [leitura for leitura in leituras if 
+                                     leitura['apartamento__apartamento'] == apartamento['apartamento'] and 
+                                     leitura['apartamento__bloco__bloco'] == apartamento['bloco__bloco']]
+            
+            if leituras_apartamento:
+                # Para cada leitura encontrada, adicionar uma linha com os dados
+                for leitura in leituras_apartamento:
+                    dados.append({
+                        'Bloco': apartamento['bloco__bloco'],
+                        'Apartamento': apartamento['apartamento'],
+                        'Data Leitura': leitura['data_leitura'],
+                        'Valor Leitura': leitura['valor_leitura']
+                    })
+            else:
+                # Se não houver leituras, adicionar uma linha com os dados do apartamento e leituras vazias
+                dados.append({
+                    'Bloco': apartamento['bloco__bloco'],
+                    'Apartamento': apartamento['apartamento'],
+                    'Data Leitura': None,
+                    'Valor Leitura': None
+                })
 
         # Criar o DataFrame
         df = pd.DataFrame(dados)
@@ -155,10 +152,10 @@ class DownloadExcelView(View):
         response = HttpResponse(
             content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         )
-        response['Content-Disposition'] = 'attachment; filename="leituras_completas_doce_vita.xlsx"'
+        response['Content-Disposition'] = 'attachment; filename="apartamentos_leituras.xlsx"'
 
         # Salvar o DataFrame no formato Excel
         with pd.ExcelWriter(response, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Leituras')
+            df.to_excel(writer, index=False, sheet_name='Apartamentos e Leituras')
 
         return response
