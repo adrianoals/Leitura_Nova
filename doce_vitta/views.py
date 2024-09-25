@@ -107,21 +107,22 @@ from django.views import View
 
 class DownloadExcelView(View):
     def get(self, request):
-        # Obter a lista completa de blocos e unidades (do 001 ao 164 para os blocos 02 e 03)
+        # Definir os blocos e apartamentos por andar para cada bloco
         blocos = ['01', '02', '03']
+
+        # Definir as unidades por bloco
         unidades_por_bloco = {
-            '01': list(range(1, 155)),  # 154 unidades para bloco 01
-            '02': list(range(1, 165)),  # 164 unidades para bloco 02
-            '03': list(range(1, 165)),  # 164 unidades para bloco 03
+            '01': [f'{andar:02d}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 64 unidades
+            '02': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 68 unidades
+            '03': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 68 unidades
         }
 
         # Criar uma lista completa de apartamentos no formato [bloco] unidade
         apartamentos_completos = []
         for bloco, unidades in unidades_por_bloco.items():
             for unidade in unidades:
-                # Formatar a unidade com 3 dígitos
-                unidade_formatada = f'{unidade:03d}'
-                apartamentos_completos.append(f'[{bloco}] {unidade_formatada}')
+                # Formatar a unidade com o bloco correto
+                apartamentos_completos.append(f'[{bloco}] {unidade}')
 
         # Obter as leituras existentes no banco de dados
         leituras_existentes = Leitura.objects.all().values(
