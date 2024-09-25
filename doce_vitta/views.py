@@ -110,18 +110,18 @@ class DownloadExcelView(View):
         # Definir os blocos e apartamentos por andar para cada bloco
         blocos = ['01', '02', '03']
 
-        # Definir as unidades por bloco (usando o padrão correto de numeração por andar)
+        # Definir as unidades por bloco seguindo o padrão [andar][unidade]
         unidades_por_bloco = {
-            '01': [f'{andar:02d}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 001 a 154
-            '02': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 001 a 164
-            '03': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 001 a 164
+            '01': [f'{andar}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 001 a 154
+            '02': [f'{andar}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 001 a 164
+            '03': [f'{andar}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 001 a 164
         }
 
         # Criar uma lista completa de apartamentos no formato [bloco] unidade
         apartamentos_completos = []
         for bloco, unidades in unidades_por_bloco.items():
             for unidade in unidades:
-                # Formatar a unidade com o bloco correto
+                # Formatar a unidade no formato correto
                 apartamentos_completos.append(f'[{bloco}] {unidade}')
 
         # Obter as leituras existentes no banco de dados
@@ -131,7 +131,7 @@ class DownloadExcelView(View):
 
         # Criar um dicionário com as leituras formatadas como [bloco] unidade
         leituras_dict = {
-            f"[{leitura['apartamento__bloco__bloco']}] {str(leitura['apartamento__apartamento']).zfill(3)}": {
+            f"[{leitura['apartamento__bloco__bloco']}] {leitura['apartamento__apartamento']}": {
                 'data_leitura': leitura['data_leitura'],
                 'valor_leitura': leitura['valor_leitura']
             }
