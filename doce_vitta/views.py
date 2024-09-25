@@ -110,11 +110,11 @@ class DownloadExcelView(View):
         # Definir os blocos e apartamentos por andar para cada bloco
         blocos = ['01', '02', '03']
 
-        # Definir as unidades por bloco
+        # Definir as unidades por bloco (usando o padrão correto de numeração por andar)
         unidades_por_bloco = {
-            '01': [f'{andar:02d}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 64 unidades
-            '02': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 68 unidades
-            '03': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 68 unidades
+            '01': [f'{andar:02d}{unidade:02d}' for andar in range(0, 16) for unidade in range(1, 5)],  # Bloco 01: 001 a 154
+            '02': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 02: 001 a 164
+            '03': [f'{andar:02d}{unidade:02d}' for andar in range(0, 17) for unidade in range(1, 5)],  # Bloco 03: 001 a 164
         }
 
         # Criar uma lista completa de apartamentos no formato [bloco] unidade
