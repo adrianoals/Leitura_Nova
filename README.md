@@ -1,6 +1,4 @@
-Aqui está o `README.md` para o seu projeto **Leitura Nova**:
-
-```md
+```
 # Leitura Nova
 
 **Leitura Nova** é um projeto desenvolvido para a empresa Leitura Nova com o objetivo de gerenciar as leituras de hidrômetros de água ou medidores de gás localizados dentro dos apartamentos. O sistema permite que os usuários, ao acessarem o link do projeto disponível online, selecionem sua unidade e enviem uma foto do seu medidor. Isso facilita o controle do consumo mensal dos condomínios pela empresa Leitura Nova, que pode monitorar o consumo de forma eficiente.
@@ -89,5 +87,3 @@ Este projeto é licenciado sob a [MIT License](LICENSE).
 
 **Leitura Nova** - Facilitando a gestão de consumo em condomínios.
 ```
-
-Esse `README.md` fornece uma visão geral clara do projeto, detalha as tecnologias usadas, explica como configurar e rodar o projeto localmente, e informa sobre a contribuição e licença.
