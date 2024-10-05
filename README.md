@@ -86,4 +86,3 @@ Este projeto é licenciado sob a [MIT License](LICENSE).
 **Leitura Nova** - Facilitando a gestão de consumo em condomínios.
 ```
 
-Esse `README.md` fornece uma visão geral clara do projeto, detalha as tecnologias usadas, explica como configurar e rodar o projeto localmente, e informa sobre a contribuição e licença.
