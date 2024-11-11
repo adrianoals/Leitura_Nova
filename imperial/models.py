@@ -15,7 +15,7 @@ def rename_file(instance, filename):
     # Construir o novo nome do arquivo. Você pode ajustar o formato conforme necessário
     new_filename = f"{instance.apartamento.apartamento}_mês_{month}.jpg"
     # Retornar o caminho completo do novo arquivo
-    return f"leituras/alvorada/{month}/{new_filename}"
+    return f"leituras/imperial/{month}/{new_filename}"
 
 class Leitura(models.Model):
     apartamento = models.ForeignKey(Apartamento, on_delete=models.CASCADE)

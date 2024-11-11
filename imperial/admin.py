@@ -4,7 +4,8 @@ import zipfile
 import os
 from io import BytesIO
 from django.conf import settings
-from alvorada.models import Apartamento, Leitura
+from imperial.models import Apartamento, Leitura
+from imperial.models import Apartamento, Leitura
 
 # Função para baixar fotos selecionadas como ZIP
 @admin.action(description="Baixar fotos selecionadas como ZIP")

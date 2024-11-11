@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Apartamento, Leitura
+from imperial.models import Apartamento, Leitura
 from django.contrib import messages
 import datetime
 import os
@@ -33,16 +33,16 @@ def imperial(request):
 
     # Se não for uma solicitação POST, exiba a página normalmente
     apartamentos = Apartamento.objects.all()
-    return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
+    return render(request, 'imperial/imperial.html', {'apartamentos': apartamentos})
 
 
 def imperial_download_photos(request):
     # Caminho base onde as fotos estão armazenadas
-    base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/alvorada')
+    base_directory = os.path.join(settings.MEDIA_ROOT, 'leituras/imperial')
     
     # Preparar um arquivo zip em memória
     response = HttpResponse(content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename="photos_alvorada.zip"'
+    response['Content-Disposition'] = 'attachment; filename="photos_imperial.zip"'
     
     # Criar um arquivo ZipFile diretamente na resposta HTTP
     with zipfile.ZipFile(response, 'w', zipfile.ZIP_DEFLATED) as memory_zip:
@@ -56,3 +56,7 @@ def imperial_download_photos(request):
                 memory_zip.write(file_path, os.path.relpath(file_path, base_directory))
 
     return response
+
+
+def ok(request):
+    return render(request, 'leitura_nova/ok.html')

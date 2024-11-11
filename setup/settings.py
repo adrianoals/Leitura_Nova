@@ -30,11 +30,11 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-# ALLOWED_HOSTS = ['*']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-DEBUG = False
-ALLOWED_HOSTS = ['3.14.64.156', 'leitura.leituranova.com.br', 'leitura.leituranova.com.br']
+# DEBUG = False
+# ALLOWED_HOSTS = ['3.14.64.156', 'leitura.leituranova.com.br', 'leitura.leituranova.com.br']
 
 
 
@@ -47,9 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'doce_vitta.apps.DoceVittaConfig',
     'tres_coelho.apps.TresCoelhoConfig',
-    'alvorada.apps.AlvoradaConfig',
+    'imperial.apps.ImperialConfig',
 ]
 
 MIDDLEWARE = [
