@@ -17,7 +17,7 @@ body {
     
     /* font-family: 'Kanit', sans-serif; */
     font-weight: 100;
-    font-size: 35px;
+    font-size: 18px;
     padding-top: 100px; /* Espaço adicional no topo para não sobrepor conteúdo */
 
 
@@ -28,7 +28,6 @@ body {
     /* font-family: 'Kanit', sans-serif; */
     font-weight: 100;
     font-size: 23px;
-    color:#F06129;
 }
 
 .font-aviso {
@@ -161,12 +160,10 @@ h5 {
     text-decoration: none; /* Remove o sublinhado do link */
 }
 
+
 input, select, textarea, label {
     font-size: 16px;
 }
 
-.margem-relogio{
-    margin-top: 500px !important;
-}
 
   

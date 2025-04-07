@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tres_coelho.apps.TresCoelhoConfig',
     'imperial.apps.ImperialConfig',
+    'alvorada.apps.AlvoradaConfig',
 ]
 
 MIDDLEWARE = [
