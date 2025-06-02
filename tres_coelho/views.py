@@ -43,6 +43,38 @@ def tres_coelho(request):
     
     return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
+def tres_coelho_atual(request):
+    apartamentos = Apartamento.objects.all()
+    
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                apartamento_id = request.POST.get('apartamento')
+                valor_leitura = request.POST.get('valor_leitura')
+                foto_relogio = request.FILES.get('foto_relogio')
+                
+                if not all([apartamento_id, valor_leitura, foto_relogio]):
+                    messages.error(request, 'Por favor, preencha todos os campos obrigatórios, incluindo a foto do relógio.')
+                    return render(request, 'tres_coelho/tres_coelho_atual.html', {'apartamentos': apartamentos})
+                
+                apartamento = Apartamento.objects.get(id=apartamento_id)
+                
+                # Create the Leitura object
+                leitura = Leitura.objects.create(
+                    apartamento=apartamento,
+                    valor_leitura=valor_leitura,
+                    foto_relogio=foto_relogio
+                )
+                
+                messages.success(request, 'Leitura registrada com sucesso!')
+                return redirect('tres_coelho_atual')
+                
+        except Apartamento.DoesNotExist:
+            messages.error(request, 'Apartamento não encontrado.')
+        except Exception as e:
+            messages.error(request, f'Erro ao registrar leitura: {str(e)}')
+    
+    return render(request, 'tres_coelho/tres_coelho_atual.html', {'apartamentos': apartamentos})
 
 def tc_download_photos(request):
     try:

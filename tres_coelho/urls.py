@@ -1,10 +1,11 @@
 from django.urls import path
-from tres_coelho.views import tres_coelho, tc_download_photos, DownloadExcelView
+from . import views
 
 urlpatterns = [
-    path('3coelhos', tres_coelho, name='tres_coelho'),
-    path('tc-download', tc_download_photos, name='tc_download_photos'),
-    path('tc-excel/', DownloadExcelView.as_view(), name='tc-excel'),
+    path('3coelhos', views.tres_coelho, name='tres_coelho'),
+    path('3coelhos/atual', views.tres_coelho_atual, name='tres_coelho_atual'),
+    path('3coelhos/download', views.tc_download_photos, name='tc_download_photos'),
+    path('3coelhos/excel', views.DownloadExcelView.as_view(), name='tc_download_excel'),
 ]
 
 
