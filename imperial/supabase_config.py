@@ -15,4 +15,4 @@ supabase = create_client(
     supabase_key
 )
 
-BUCKET_NAME = 'leituras-imperial' 
+BUCKET_NAME = 'leituras-imperial'

@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 class Apartamento(models.Model):
-    apartamento = models.CharField(max_length=10)
+    apartamento = models.CharField(max_length=50)
 
     def __str__(self):
         return self.apartamento
