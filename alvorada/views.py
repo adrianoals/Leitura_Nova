@@ -11,6 +11,8 @@ def alvorada(request):
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
+        # Conversão do valor de leitura para formato decimal (ponto)
+        valor_leitura = valor_leitura.replace(',', '.')
         foto_relogio = request.FILES.get('foto_relogio')
 
         try:
@@ -25,7 +27,8 @@ def alvorada(request):
                 foto_relogio=foto_relogio
             )
             messages.success(request, 'Leitura enviada com sucesso!')
-            return redirect('/ok')
+            apartamentos = Apartamento.objects.all()
+            return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
         except Exception as e:
             # Aqui você pode definir uma mensagem de erro com base na exceção
             # e passá-la para a página de erro usando a sessão
