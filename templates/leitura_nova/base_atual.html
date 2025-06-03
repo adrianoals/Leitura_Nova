@@ -14,6 +14,8 @@
                         'primary': '#2b81c3',
                         'secondary': '#22b1a4',
                         'accent': '#f8a140',
+                        'light-blue': '#eaf6fb',
+                        'footer-blue': '#d4e9f5',
                     }
                 }
             }
@@ -44,29 +46,23 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #22b1a4;
         }
+
+        .footer-bg {
+            background-color: #d4e9f5;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-[#eaf6fb] shadow-sm">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <a href="/" class="text-2xl font-bold text-[#2b81c3]">Leitura Nova</a>
-                <div class="space-x-4">
-                    <a href="/3coelhos" class="text-gray-600 hover:text-[#2b81c3] transition-colors">Versão Antiga</a>
-                    <a href="/3coelhos/atual" class="text-gray-600 hover:text-[#2b81c3] transition-colors">Versão Nova</a>
-                </div>
-            </div>
-        </nav>
-    </header>
+
 
     <!-- Main Content -->
     {% block content %}
     {% endblock %}
 
     <!-- Footer -->
-    <footer class="bg-[#eaf6fb] border-t mt-auto">
-        <div class="container mx-auto px-4 py-6">
+    <footer class="footer-bg border-t mt-auto">
+        
+        <div class="container mx-auto px-4 py-10">
             <div class="text-center text-gray-600">
                 <p>&copy; {% now "Y" %} Leitura Nova. Todos os direitos reservados.</p>
             </div>
