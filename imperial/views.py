@@ -27,7 +27,9 @@ def imperial(request):
                 foto_relogio=foto_relogio
             )
             messages.success(request, 'Leitura enviada com sucesso!')
-            return redirect('/ok')
+            # Após sucesso, exibe a mensagem na própria página, igual ao 3 coelhos
+            apartamentos = Apartamento.objects.all()
+            return render(request, 'imperial/imperial.html', {'apartamentos': apartamentos})
         except Exception as e:
             # Aqui você pode definir uma mensagem de erro com base na exceção
             # e passá-la para a página de erro usando a sessão
