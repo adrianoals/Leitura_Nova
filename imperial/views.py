@@ -11,6 +11,8 @@ def imperial(request):
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
+        # Conversão do valor de leitura para formato decimal (ponto)
+        valor_leitura = valor_leitura.replace(',', '.')
         foto_relogio = request.FILES.get('foto_relogio')
 
         try:

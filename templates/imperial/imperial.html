@@ -1,65 +1,148 @@
-{% extends 'leitura_nova/base.html' %}
+{% extends 'leitura_nova/base_atual.html' %}
 {% load static %}
 {% block content %}
-        <main>
-            {% if messages %}
-            <div class="alert-messages margem-up">
-                {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} text-center font-style">
-                    {{ message }}
-                </div>
-                {% endfor %}
+<main class="min-h-screen bg-[#eaf6fb] flex flex-col items-center justify-center py-8">
+    {% if messages %}
+    <div class="container mx-auto px-4 py-4">
+        {% for message in messages %}
+        <div class="rounded-lg p-4 mb-4 text-center {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Logo -->
+    <div class="flex flex-col items-center mb-">
+        <img src="{% static 'assets/images/logo.png' %}" alt="Leitura Nova Logo" class="h-40 w-40 drop-shadow-md">
+    </div>
+
+    <div class="container mx-auto px-4 py-4">
+        <!-- Form Section -->
+        <div class="max-w-3xl mx-auto bg-[#2b81c3] rounded-2xl shadow-2xl overflow-hidden border border-[#b6e0f7]">
+            <!-- Header Section -->
+            <div class="text-white p-8 text-center">
+                <h1 class="text-3xl font-bold mb-2 tracking-wide">CONDOMÍNIO IMPERIAL</h1>
+                <h2 class="text-xl font-medium">LEITURA DE ÁGUA {% now "F/Y" %}</h2>
             </div>
-            {% endif %}
+            <div class="p-8">
+                <h3 class="text-2xl font-bold text-center text-white mb-8">INSIRA OS DADOS DE SUA LEITURA</h3>
 
-            <div class="container">
-
-                
-                <div class="row justify-content-center mt-0">
-                    <div class="col-md-8 blueground text-center">  
-                            <h5 class="my-5">CONDOMÍNIO IMPERIAL</h5>
-                            <h5 class="my-5">LEITURA DE ÁGUA MAIO/2025</h5>
-                    </div>                        
-                </div>                        
-                            
-                            
-                <div class="row justify-content-center mt-0">
-                    <div class="col-md-8 blueground">
-                        <h5 class="mt-5 mb-5 text-center">INSIRA OS DADOS DE SUA LEITURA</h5>
-
-                        <form class="px-5" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label for="apartamento" class="form-label font-style">CASA</label>
-                                <select class="form-select font-style" id="apartamento" name="apartamento" required>
-                                    <option value="">Selecione sua casa</option>
-                                    {% for apt in apartamentos %}
-                                    <option value="{{ apt.id }}">{{ apt.apartamento }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="mb-3">
-  
-                                <label for="leitura" class="form-label font-style">INFORME SUA LEITURA</label>
-                                <input type="text" class="form-control font-style" id="leitura" name="valor_leitura" placeholder="00000.000" pattern="^\d{0,5}(\.\d{1,3})?$" title="Por favor, insira até 5 dígitos antes do ponto e até 3 dígitos após o ponto.">
-                                <span class="text-warning">00000.000 (Preencha nesse formato)</span>
-                                <p class="text-warning">Para separar os números em vermelho de seu relógio utilize " . "<p>
-                                
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="foto_relogio" class="form-label font-style">ANEXE A FOTO DO SEU RELÓGIO DE ÁGUA</label>
-                                <input type="file" class="form-control font-style" id="foto_relogio" name="foto_relogio">
-                            </div>
-
-                            <h5 class="text-center mt-5">Por favor verifique os dados antes de enviar!</h5>
-
-                            <div class="d-flex justify-content-center">
-                                <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
-                            </div>
-                        </form> 
+                <form method="post" enctype="multipart/form-data" class="space-y-6">
+                    {% csrf_token %}
+                    <!-- Casa Select -->
+                    <div class="space-y-2">
+                        <label for="apartamento" class="block text-sm font-medium text-white">CASA</label>
+                        <select id="apartamento" name="apartamento" required
+                            class="w-full px-4 py-2 border border-[#b6e0f7] rounded-lg focus:ring-2 focus:ring-[#2b81c3] focus:border-[#2b81c3] focus:outline-none transition-all duration-200 ease-in-out hover:border-[#2b81c3] hover:shadow-md hover:scale-[1.02] focus:shadow-lg bg-white text-[#1a5f8a]">
+                            <option value="" class="text-gray-400">Selecione sua casa</option>
+                            {% for apt in apartamentos %}
+                            <option value="{{ apt.id }}" class="text-[#1a5f8a]">{{ apt.apartamento }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                </div>
+
+                    <!-- Leitura Input -->
+                    <div class="space-y-2">
+                        <label for="leitura" class="block text-sm font-medium text-white">INFORME SUA LEITURA</label>
+                        <input type="text" id="leitura" name="valor_leitura" 
+                            class="w-full px-4 py-2 border border-[#b6e0f7] rounded-lg focus:ring-2 focus:ring-[#2b81c3] focus:border-[#2b81c3] focus:outline-none transition-all duration-200 ease-in-out hover:border-[#2b81c3] hover:shadow-md hover:scale-[1.02] focus:shadow-lg bg-white text-[#1a5f8a] placeholder-gray-400"
+                            placeholder="00000,000" 
+                            oninput="formatLeitura(this)"
+                            onkeydown="onlyNumbers(event)"
+                            maxlength="9"
+                            required>
+                        <p class="text-sm text-[#FEA80E] font-bold">Os números em vermelho de seu relógio são após a vírgula.</p>
+                    </div>
+
+                    <!-- Foto Upload -->
+                    <div class="space-y-2">
+                        <label for="foto_relogio" class="block text-sm font-medium text-white">ANEXE A FOTO DO SEU RELÓGIO DE ÁGUA</label>
+                        <label for="foto_relogio" class="mt-1 flex flex-col items-center justify-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg border-[#22b1a4] hover:border-[#2b81c3] transition-all duration-200 ease-in-out bg-white hover:scale-[1.02] hover:shadow-md cursor-pointer space-y-2">
+                            <svg class="mx-auto h-12 w-12 text-[#2b81c3] transition-colors duration-200" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <div class="flex text-sm text-gray-600 justify-center">
+                                <span class="relative bg-white rounded-md font-medium text-[#2b81c3] hover:text-[#22b1a4] transition-colors duration-200">
+                                    Upload da foto
+                                </span>
+                                <p class="pl-1">ou arraste e solte</p>
+                            </div>
+                            <p class="text-xs text-gray-500">PNG, JPG, GIF até 10MB</p>
+                            <input id="foto_relogio" name="foto_relogio" type="file" class="hidden" required onchange="mostrarNomeArquivo()">
+                            <span id="nome-arquivo" class="text-2xl text-green-600 font-bold mt-4 flex items-center justify-center gap-2"></span>
+                        </label>
+                        <script>
+                        function mostrarNomeArquivo() {
+                            const input = document.getElementById('foto_relogio');
+                            const nomeArquivo = document.getElementById('nome-arquivo');
+                            if (input.files && input.files.length > 0) {
+                                nomeArquivo.innerHTML = `
+                                    <svg class="inline-block w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    ${input.files[0].name}
+                                `;
+                            } else {
+                                nomeArquivo.textContent = '';
+                            }
+                        }
+                        </script>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mt-8">
+                        <h4 class="text-lg font-medium text-white mb-4">Por favor verifique os dados antes de enviar!</h4>
+                        <button type="submit" 
+                            class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-[#FEA80E] hover:bg-[#22b1a4] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2b81c3] transition-colors shadow-lg">
+                            ENVIAR
+                        </button>
+                    </div>
+                </form>
             </div>
-        </main>
+        </div>
+    </div>
+</main>
+
+<script>
+    function formatLeitura(input) {
+        // Remove tudo que não é número
+        let value = input.value.replace(/\D/g, '');
+        
+        // Se não tiver valor, limpa o input
+        if (!value) {
+            input.value = '';
+            return;
+        }
+
+        // Garante que temos no máximo 8 dígitos
+        value = value.slice(0, 8);
+
+        // Separa os dígitos antes e depois da vírgula
+        let afterDecimal = value.slice(-3).padStart(3, '0');
+        let beforeDecimal = value.slice(0, -3);
+
+        // Limita a 5 dígitos antes da vírgula
+        if (beforeDecimal.length > 5) {
+            beforeDecimal = beforeDecimal.slice(-5);
+        }
+
+        // Remove zeros à esquerda
+        beforeDecimal = beforeDecimal.replace(/^0+/, '');
+        if (!beforeDecimal) {
+            beforeDecimal = '0';
+        }
+
+        // Formata o número final
+        input.value = beforeDecimal + ',' + afterDecimal;
+    }
+
+    // Previne a entrada de caracteres não numéricos
+    function onlyNumbers(event) {
+        const key = event.key;
+        if (!/^\d$/.test(key) && key !== 'Backspace' && key !== 'Delete' && key !== 'ArrowLeft' && key !== 'ArrowRight') {
+            event.preventDefault();
+        }
+    }
+</script>
 {% endblock %}
