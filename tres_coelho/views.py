@@ -51,6 +51,8 @@ def tres_coelho_atual(request):
             with transaction.atomic():
                 apartamento_id = request.POST.get('apartamento')
                 valor_leitura = request.POST.get('valor_leitura')
+                # Conversão do valor de leitura para formato decimal (ponto)
+                valor_leitura = valor_leitura.replace(',', '.')
                 foto_relogio = request.FILES.get('foto_relogio')
                 
                 if not all([apartamento_id, valor_leitura, foto_relogio]):
@@ -67,7 +69,7 @@ def tres_coelho_atual(request):
                 )
                 
                 messages.success(request, 'Leitura registrada com sucesso!')
-                return redirect('tres_coelho_atual')
+                return redirect('tres_coelho')
                 
         except Apartamento.DoesNotExist:
             messages.error(request, 'Apartamento não encontrado.')
