@@ -19,7 +19,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.docker.network=LeituraSorteioNet
-        - traefik.http.routers.leitura.rule=Host(`leitura.leituranova.com.br`)
+        - traefik.http.routers.leitura.rule=Host(`ln.leituranova.com.br`)
         - traefik.http.routers.leitura.entrypoints=websecure
         - traefik.http.routers.leitura.tls.certresolver=letsencryptresolver
         - traefik.http.services.leitura.loadbalancer.server.port=8000
