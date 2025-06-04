@@ -16,7 +16,7 @@ class Apartamento(models.Model):
 def get_upload_path(instance, filename):
     current_month = now().strftime('%m')
     file_extension = os.path.splitext(filename)[1]
-    return f"{current_month}/{instance.apartamento.apartamento}_mes_{current_month}{file_extension}"
+    return f"{current_month}/{instance.apartamento.apartamento}_mes_{current_month}{file_extension}".replace('\\', '/')
 
 
 class Leitura(models.Model):

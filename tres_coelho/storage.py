@@ -23,6 +23,9 @@ class SupabaseStorage(Storage):
             elif name.lower().endswith('.gif'):
                 content_type = 'image/gif'
 
+            # Garante que o caminho use barras normais (/)
+            name = name.replace('\\', '/')
+
             # Faz o upload para o Supabase
             supabase.storage.from_(self.bucket_name).upload(
                 name,
