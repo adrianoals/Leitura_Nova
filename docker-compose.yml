@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  web:
+    # use tag imutável publicada no registry
+    image: leitura_nova-web:0.0.1
+    env_file:
+      - .env
+    volumes:
+      # ↔ STATIC_ROOT  →   /code/staticfiles
+      - leitura_static_volume:/code/static
+    networks:
+      - LeituraSorteioNet
+
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=LeituraSorteioNet
+        - traefik.http.routers.leitura.rule=Host(`leitura.leituranova.com.br`)
+        - traefik.http.routers.leitura.entrypoints=websecure
+        - traefik.http.routers.leitura.tls.certresolver=letsencryptresolver
+        - traefik.http.services.leitura.loadbalancer.server.port=8000
+
+    command: >
+      gunicorn setup.wsgi:application
+      --bind 0.0.0.0:8000
+      --workers 3 --timeout 120
+
+volumes:
+  leitura_static_volume:
+
+networks:
+  LeituraSorteioNet:
+    external: true
