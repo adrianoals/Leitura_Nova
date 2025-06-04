@@ -33,11 +33,17 @@ def upload_to_supabase(instance, filename):
             elif file_extension.lower() in ['.gif']:
                 content_type = 'image/gif'
             
-            supabase.storage.from_(BUCKET_NAME).upload(
-                f"{current_month}/{new_filename}",
-                file_content,
-                {"content-type": content_type}
-            )
+            try:
+                supabase.storage.from_(BUCKET_NAME).upload(
+                    f"{current_month}/{new_filename}",
+                    file_content,
+                    {"content-type": content_type}
+                )
+            except Exception as e:
+                # Detect Supabase duplicate error
+                if hasattr(e, 'args') and any('Duplicate' in str(arg) for arg in e.args):
+                    raise ValidationError("duplicate_upload")
+                raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
             
             # Reset file pointer
             instance.foto_relogio.seek(0)
@@ -45,9 +51,13 @@ def upload_to_supabase(instance, filename):
             # Return the public URL
             return f"{current_month}/{new_filename}"
             
+        except ValidationError as ve:
+            raise ve
         except Exception as e:
             raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
             
+    except ValidationError as ve:
+        raise ve
     except Exception as e:
         raise ValidationError(f"Erro ao processar a imagem: {str(e)}")
 

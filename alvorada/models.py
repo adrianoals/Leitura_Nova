@@ -13,6 +13,7 @@ class Apartamento(models.Model):
 
 
 def upload_to_supabase(instance, filename):
+    import re
     try:
         current_month = now().strftime('%m')
         file_extension = os.path.splitext(filename)[1]
@@ -24,15 +25,25 @@ def upload_to_supabase(instance, filename):
                 content_type = 'image/png'
             elif file_extension.lower() in ['.gif']:
                 content_type = 'image/gif'
-            supabase.storage.from_(BUCKET_NAME).upload(
-                f"{current_month}/{new_filename}",
-                file_content,
-                {"content-type": content_type}
-            )
+            try:
+                supabase.storage.from_(BUCKET_NAME).upload(
+                    f"{current_month}/{new_filename}",
+                    file_content,
+                    {"content-type": content_type}
+                )
+            except Exception as e:
+                # Detecta erro de duplicidade do Supabase
+                if hasattr(e, 'args') and any('Duplicate' in str(arg) for arg in e.args):
+                    raise ValidationError("duplicate_upload")
+                raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
             instance.foto_relogio.seek(0)
             return f"{current_month}/{new_filename}"
+        except ValidationError as ve:
+            raise ve
         except Exception as e:
             raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
+    except ValidationError as ve:
+        raise ve
     except Exception as e:
         raise ValidationError(f"Erro ao processar a imagem: {str(e)}")
 

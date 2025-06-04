@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from alvorada.models import Apartamento, Leitura
 from django.contrib import messages
 import datetime
@@ -6,8 +6,10 @@ import os
 import zipfile
 from django.http import HttpResponse
 from django.conf import settings
+from django.core.exceptions import ValidationError
 
 def alvorada(request):
+    apartamentos = list(Apartamento.objects.all())  # Converte para lista imediatamente
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
@@ -27,15 +29,18 @@ def alvorada(request):
                 foto_relogio=foto_relogio
             )
             messages.success(request, 'Leitura enviada com sucesso!')
-            apartamentos = Apartamento.objects.all()
             return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
         except Exception as e:
-            # Aqui você pode definir uma mensagem de erro com base na exceção
-            # e passá-la para a página de erro usando a sessão
-            request.session['error_message'] = str(e)  # Usando sessão
+            if isinstance(e, ValidationError) and hasattr(e, 'message') and e.message == 'duplicate_upload':
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif isinstance(e, ValidationError) and hasattr(e, 'messages') and 'duplicate_upload' in e.messages:
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif 'duplicate_upload' in str(e):
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            else:
+                messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
+            return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
 
-    # Se não for uma solicitação POST, exiba a página normalmente
-    apartamentos = Apartamento.objects.all()
     return render(request, 'alvorada/alvorada.html', {'apartamentos': apartamentos})
 
 
@@ -60,6 +65,3 @@ def alvorada_download_photos(request):
 
     return response
 
-
-def ok(request):
-    return render(request, 'leitura_nova/ok.html')

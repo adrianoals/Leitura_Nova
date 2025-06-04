@@ -11,36 +11,37 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 def tres_coelho(request):
-    apartamentos = Apartamento.objects.all()
-    
+    apartamentos = list(Apartamento.objects.all())  # Converte para lista imediatamente
     if request.method == 'POST':
+        apartamento_id = request.POST.get('apartamento')
+        valor_leitura = request.POST.get('valor_leitura')
+        valor_leitura = valor_leitura.replace(',', '.')
+        foto_relogio = request.FILES.get('foto_relogio')
+
         try:
-            with transaction.atomic():
-                apartamento_id = request.POST.get('apartamento')
-                valor_leitura = request.POST.get('valor_leitura')
-                foto_relogio = request.FILES.get('foto_relogio')
-                
-                if not all([apartamento_id, valor_leitura, foto_relogio]):
-                    messages.error(request, 'Por favor, preencha todos os campos obrigatórios, incluindo a foto do relógio.')
-                    return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
-                
-                apartamento = Apartamento.objects.get(id=apartamento_id)
-                
-                # Create the Leitura object
-                leitura = Leitura.objects.create(
-                    apartamento=apartamento,
-                    valor_leitura=valor_leitura,
-                    foto_relogio=foto_relogio
-                )
-                
-                messages.success(request, 'Leitura registrada com sucesso!')
-                return redirect('tres_coelho')
-                
-        except Apartamento.DoesNotExist:
-            messages.error(request, 'Apartamento não encontrado.')
+            if not all([apartamento_id, valor_leitura, foto_relogio]):
+                raise ValueError('Todos os campos são obrigatórios.')
+
+            apartamento = Apartamento.objects.get(id=apartamento_id)
+            Leitura.objects.create(
+                apartamento=apartamento,
+                valor_leitura=valor_leitura,
+                data_leitura=datetime.date.today(),
+                foto_relogio=foto_relogio
+            )
+            messages.success(request, 'Leitura enviada com sucesso!')
+            return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
         except Exception as e:
-            messages.error(request, f'Erro ao registrar leitura: {str(e)}')
-    
+            if isinstance(e, ValidationError) and hasattr(e, 'message') and e.message == 'duplicate_upload':
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif isinstance(e, ValidationError) and hasattr(e, 'messages') and 'duplicate_upload' in e.messages:
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif 'duplicate_upload' in str(e):
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            else:
+                messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
+            return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
+
     return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
 
 def tres_coelho_atual(request):
@@ -74,7 +75,14 @@ def tres_coelho_atual(request):
         except Apartamento.DoesNotExist:
             messages.error(request, 'Apartamento não encontrado.')
         except Exception as e:
-            messages.error(request, f'Erro ao registrar leitura: {str(e)}')
+            if isinstance(e, ValidationError) and hasattr(e, 'message') and e.message == 'duplicate_upload':
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif isinstance(e, ValidationError) and hasattr(e, 'messages') and 'duplicate_upload' in e.messages:
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            elif 'duplicate_upload' in str(e):
+                messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
+            else:
+                messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
     
     return render(request, 'tres_coelho/tres_coelho_atual.html', {'apartamentos': apartamentos})
 
