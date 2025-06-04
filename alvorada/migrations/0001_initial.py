@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('data_leitura', models.DateField()),
                 ('valor_leitura', models.DecimalField(decimal_places=3, max_digits=8)),
-                ('foto_relogio', models.ImageField(blank=True, null=True, upload_to=alvorada.models.upload_to_supabase)),
+                ('foto_relogio', models.ImageField(blank=True, null=True, upload_to=alvorada.models.get_upload_path)),
                 ('apartamento', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='alvorada.apartamento')),
             ],
         ),

@@ -1,72 +1,34 @@
 from django.db import models
-from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 from .supabase_config import supabase, BUCKET_NAME
 import os
-from datetime import datetime
+from django.core.exceptions import ValidationError
+from .storage import SupabaseStorage
 
 
 class Apartamento(models.Model):
-    apartamento = models.CharField(max_length=50)
+    apartamento = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.apartamento
+        return f"{self.apartamento}"
 
 
-def upload_to_supabase(instance, filename):
-    try:
-        # Get the current month
-        current_month = datetime.now().strftime('%m')
-        
-        # Create a unique filename
-        file_extension = os.path.splitext(filename)[1]
-        new_filename = f"{instance.apartamento.apartamento}_mes_{current_month}{file_extension}"
-        
-        # Upload to Supabase
-        try:
-            # Get the file content
-            file_content = instance.foto_relogio.read()
-            
-            # Determine content type based on file extension
-            content_type = 'image/jpeg'  # default
-            if file_extension.lower() in ['.png']:
-                content_type = 'image/png'
-            elif file_extension.lower() in ['.gif']:
-                content_type = 'image/gif'
-            
-            try:
-                supabase.storage.from_(BUCKET_NAME).upload(
-                    f"{current_month}/{new_filename}",
-                    file_content,
-                    {"content-type": content_type}
-                )
-            except Exception as e:
-                # Detect Supabase duplicate error
-                if hasattr(e, 'args') and any('Duplicate' in str(arg) for arg in e.args):
-                    raise ValidationError("duplicate_upload")
-                raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
-            
-            # Reset file pointer
-            instance.foto_relogio.seek(0)
-            
-            # Return the public URL
-            return f"{current_month}/{new_filename}"
-            
-        except ValidationError as ve:
-            raise ve
-        except Exception as e:
-            raise ValidationError(f"Erro ao fazer upload da imagem: {str(e)}")
-            
-    except ValidationError as ve:
-        raise ve
-    except Exception as e:
-        raise ValidationError(f"Erro ao processar a imagem: {str(e)}")
+def get_upload_path(instance, filename):
+    current_month = now().strftime('%m')
+    file_extension = os.path.splitext(filename)[1]
+    return f"{current_month}/{instance.apartamento.apartamento}_mes_{current_month}{file_extension}"
 
 
 class Leitura(models.Model):
     apartamento = models.ForeignKey(Apartamento, on_delete=models.CASCADE)
     valor_leitura = models.DecimalField(max_digits=8, decimal_places=3)
     data_leitura = models.DateField(auto_now_add=True)
-    foto_relogio = models.ImageField(upload_to=upload_to_supabase)
+    foto_relogio = models.ImageField(
+        upload_to=get_upload_path,
+        storage=SupabaseStorage(),
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.apartamento} - {self.valor_leitura} - {self.data_leitura}"

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='Apartamento',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('apartamento', models.CharField(max_length=50)),
+                ('apartamento', models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('valor_leitura', models.DecimalField(decimal_places=3, max_digits=8)),
                 ('data_leitura', models.DateField(auto_now_add=True)),
-                ('foto_relogio', models.ImageField(upload_to=tres_coelho.models.upload_to_supabase)),
+                ('foto_relogio', models.ImageField(upload_to=tres_coelho.models.get_upload_path)),
                 ('apartamento', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tres_coelho.apartamento')),
             ],
         ),
