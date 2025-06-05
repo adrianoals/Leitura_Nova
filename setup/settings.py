@@ -38,7 +38,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # HOSTINGER
 DEBUG = False
-ALLOWED_HOSTS = ['69.62.96.47', 'ln.leituranova.com.br', 'www.link.leituranova.com.br']
+ALLOWED_HOSTS = ['69.62.96.47', 'link.leituranova.com.br', 'www.link.leituranova.com.br']
 
 
 # Confiar no cabeçalho que o Traefik envia dizendo que é https
