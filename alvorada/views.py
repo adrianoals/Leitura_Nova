@@ -7,6 +7,8 @@ import zipfile
 from django.http import HttpResponse
 from django.conf import settings
 from django.core.exceptions import ValidationError
+import pandas as pd
+from django.views import View
 
 def alvorada(request):
     apartamentos = list(Apartamento.objects.all())  # Converte para lista imediatamente
@@ -64,4 +66,57 @@ def alvorada_download_photos(request):
                 memory_zip.write(file_path, os.path.relpath(file_path, base_directory))
 
     return response
+
+
+class DownloadExcelView(View):
+    def get(self, request):
+        # Obter todos os apartamentos da tabela Apartamento
+        apartamentos = Apartamento.objects.all().values(
+            'apartamento'
+        )
+
+        # Obter todas as leituras
+        leituras = Leitura.objects.all().values(
+            'apartamento__apartamento', 'data_leitura', 'valor_leitura'
+        )
+
+        # Criar uma lista de dicionários contendo todos os apartamentos e as leituras (se houver)
+        dados = []
+
+        # Iterar sobre todos os apartamentos
+        for apartamento in apartamentos:
+            # Filtrar as leituras para o apartamento atual
+            leituras_apartamento = [leitura for leitura in leituras if 
+                                     leitura['apartamento__apartamento'] == apartamento['apartamento']]
+            
+            if leituras_apartamento:
+                # Para cada leitura encontrada, adicionar uma linha com os dados
+                for leitura in leituras_apartamento:
+                    dados.append({
+                        'Apartamento': apartamento['apartamento'],
+                        'Data Leitura': leitura['data_leitura'],
+                        'Valor Leitura': leitura['valor_leitura']
+                    })
+            else:
+                # Se não houver leituras, adicionar uma linha com os dados do apartamento e leituras vazias
+                dados.append({
+                    'Apartamento': apartamento['apartamento'],
+                    'Data Leitura': None,
+                    'Valor Leitura': None
+                })
+
+        # Criar o DataFrame
+        df = pd.DataFrame(dados)
+
+        # Configurar a resposta HTTP para tipo Excel
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        )
+        response['Content-Disposition'] = 'attachment; filename="leituras_alvorada.xlsx"'
+
+        # Salvar o DataFrame no formato Excel
+        with pd.ExcelWriter(response, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Apartamentos e Leituras')
+
+        return response
 
