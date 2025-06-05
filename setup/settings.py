@@ -38,14 +38,14 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # HOSTINGER
 DEBUG = False
-ALLOWED_HOSTS = ['69.62.96.47', 'ln.leituranova.com.br', 'www.ln.leituranova.com.br']
+ALLOWED_HOSTS = ['69.62.96.47', 'ln.leituranova.com.br', 'www.link.leituranova.com.br']
 
 
 # Confiar no cabeçalho que o Traefik envia dizendo que é https
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
 
-CSRF_TRUSTED_ORIGINS = ["https://ln.leituranova.com.br"]
+CSRF_TRUSTED_ORIGINS = ["https://link.leituranova.com.br"]
 
 
 # Application definition
