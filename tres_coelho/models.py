@@ -41,3 +41,22 @@ class Leitura(models.Model):
                 return None
         return None
 
+
+class PortalConfig(models.Model):
+    slug = models.CharField(max_length=50, unique=True, default='tres_coelho')
+    is_open = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Configuração do Portal"
+        verbose_name_plural = "Configurações do Portal"
+
+    def __str__(self):
+        status = "Aberto" if self.is_open else "Fechado"
+        return f"{self.slug} - {status}"
+
+    @classmethod
+    def get_solo(cls):
+        config, _ = cls.objects.get_or_create(slug='tres_coelho')
+        return config
+

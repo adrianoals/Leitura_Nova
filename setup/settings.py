@@ -29,16 +29,13 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-# ALLOWED_HOSTS = ['*']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
-# AWS
-# DEBUG = False
-# ALLOWED_HOSTS = ['3.14.64.156', 'leitura.leituranova.com.br', 'www.leitura.leituranova.com.br']
 
 # HOSTINGER
-DEBUG = False
-ALLOWED_HOSTS = ['69.62.96.47', 'link.leituranova.com.br', 'www.link.leituranova.com.br']
+# DEBUG = False
+# ALLOWED_HOSTS = ['69.62.96.47', 'link.leituranova.com.br', 'www.link.leituranova.com.br']
 
 
 # Confiar no cabeçalho que o Traefik envia dizendo que é https

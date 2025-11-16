@@ -25,6 +25,10 @@
                             
                 <div class="row justify-content-center mt-0">
                     <div class="col-md-8 blueground">
+                        {% if not is_portal_open %}
+                            <h5 class="mt-5 mb-3 text-center">Período de leituras fechado</h5>
+                            <p class="text-center font-style mb-5">No momento não estamos recebendo envios para este condomínio. Volte em breve ou contate a administração.</p>
+                        {% else %}
                         <h5 class="mt-5 mb-5 text-center">INSIRA OS DADOS DE SUA LEITURA</h5>
 
                         <form class="px-5" method="post" enctype="multipart/form-data">
@@ -58,6 +62,7 @@
                                 <button type="submit" class="btn rounded-circle btn-yellow wh-100 mt-5 mb-5">ENVIAR</button>
                             </div>
                         </form> 
+                        {% endif %}
                     </div>
                 </div>
             </div>

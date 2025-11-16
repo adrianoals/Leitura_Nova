@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Apartamento, Leitura
+from .models import Apartamento, Leitura, PortalConfig
 from django.contrib import messages
 import datetime
 import os
@@ -11,7 +11,15 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 def tres_coelho(request):
+    config = PortalConfig.get_solo()
     apartamentos = list(Apartamento.objects.all())  # Converte para lista imediatamente
+    context = {'apartamentos': apartamentos, 'is_portal_open': config.is_open}
+
+    if not config.is_open:
+        if request.method == 'POST':
+            messages.warning(request, 'O período de leituras para este condomínio está fechado no momento.')
+        return render(request, 'tres_coelho/tres_coelho.html', context)
+
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
@@ -30,7 +38,7 @@ def tres_coelho(request):
                 foto_relogio=foto_relogio
             )
             messages.success(request, 'Leitura enviada com sucesso!')
-            return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
+            return render(request, 'tres_coelho/tres_coelho.html', context)
         except Exception as e:
             if isinstance(e, ValidationError) and hasattr(e, 'message') and e.message == 'duplicate_upload':
                 messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
@@ -40,12 +48,19 @@ def tres_coelho(request):
                 messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
             else:
                 messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
-            return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
+            return render(request, 'tres_coelho/tres_coelho.html', context)
 
-    return render(request, 'tres_coelho/tres_coelho.html', {'apartamentos': apartamentos})
+    return render(request, 'tres_coelho/tres_coelho.html', context)
 
 def tres_coelho_atual(request):
+    config = PortalConfig.get_solo()
     apartamentos = Apartamento.objects.all()
+    context = {'apartamentos': apartamentos, 'is_portal_open': config.is_open}
+
+    if not config.is_open:
+        if request.method == 'POST':
+            messages.warning(request, 'O período de leituras para este condomínio está fechado no momento.')
+        return render(request, 'tres_coelho/tres_coelho_atual.html', context)
     
     if request.method == 'POST':
         try:
@@ -58,7 +73,7 @@ def tres_coelho_atual(request):
                 
                 if not all([apartamento_id, valor_leitura, foto_relogio]):
                     messages.error(request, 'Por favor, preencha todos os campos obrigatórios, incluindo a foto do relógio.')
-                    return render(request, 'tres_coelho/tres_coelho_atual.html', {'apartamentos': apartamentos})
+                    return render(request, 'tres_coelho/tres_coelho_atual.html', context)
                 
                 apartamento = Apartamento.objects.get(id=apartamento_id)
                 
@@ -84,7 +99,7 @@ def tres_coelho_atual(request):
             else:
                 messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
     
-    return render(request, 'tres_coelho/tres_coelho_atual.html', {'apartamentos': apartamentos})
+    return render(request, 'tres_coelho/tres_coelho_atual.html', context)
 
 def tc_download_photos(request):
     try:
