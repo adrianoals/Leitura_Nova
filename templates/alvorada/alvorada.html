@@ -26,6 +26,13 @@
                 <h2 class="text-xl font-medium">LEITURA DE GÁS {% now "F/Y" %}</h2>
             </div>
             <div class="p-8">
+                {% if not is_portal_open %}
+                <div class="bg-white rounded-xl p-8 text-center shadow-inner">
+                    <h3 class="text-2xl font-bold text-[#2b81c3] mb-4">Período de leituras fechado</h3>
+                    <p class="text-[#1a5f8a] mb-6">No momento não estamos recebendo leituras para o condomínio Alvorada. Volte em breve ou contate a administração.</p>
+                    <p class="text-sm text-gray-500">Assim que o portal for reaberto, o formulário ficará disponível novamente.</p>
+                </div>
+                {% else %}
                 <h3 class="text-2xl font-bold text-center text-white mb-8">INSIRA OS DADOS DE SUA LEITURA</h3>
 
                 <form method="post" enctype="multipart/form-data" class="space-y-6">
@@ -99,6 +106,7 @@
                         </button>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>

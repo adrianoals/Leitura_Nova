@@ -32,3 +32,22 @@ class Leitura(models.Model):
 
     def __str__(self):
         return f"Leitura {self.valor_leitura} - {self.apartamento.apartamento} ({self.data_leitura})"
+
+
+class PortalConfig(models.Model):
+    slug = models.CharField(max_length=50, unique=True, default='alvorada')
+    is_open = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Configuração do Portal"
+        verbose_name_plural = "Configurações do Portal"
+
+    def __str__(self):
+        status = "Aberto" if self.is_open else "Fechado"
+        return f"{self.slug} - {status}"
+
+    @classmethod
+    def get_solo(cls):
+        config, _ = cls.objects.get_or_create(slug='alvorada')
+        return config

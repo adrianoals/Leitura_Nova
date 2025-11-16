@@ -35,4 +35,5 @@ Permitir ativar ou desativar, por condomínio, a página onde moradores enviam l
 
 ### Status Atual
 - **Tres Coelho**: modelo `PortalConfig`, admin, views e templates já atualizados. Quando `is_open = False`, o formulário é bloqueado e apenas o aviso é exibido.
-- **Imperial/Alvorada**: pendentes de replicar a mesma estrutura após validação no Tres Coelho.
+- **Alvorada**: mesma estrutura implementada (PortalConfig + bloqueio nos templates). Portal já pode ser controlado via admin.
+- **Imperial**: pendente de replicar a mesma estrutura após validação dos demais.
