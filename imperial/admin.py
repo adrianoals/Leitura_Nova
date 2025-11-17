@@ -4,8 +4,7 @@ import zipfile
 import os
 from io import BytesIO
 from django.conf import settings
-from imperial.models import Apartamento, Leitura
-from imperial.models import Apartamento, Leitura
+from imperial.models import Apartamento, Leitura, PortalConfig
 
 # Função para baixar fotos selecionadas como ZIP
 @admin.action(description="Baixar fotos selecionadas como ZIP")
@@ -34,7 +33,14 @@ class LeituraAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'apartamento', 'data_leitura', 'valor_leitura')
     actions = [download_photos_as_zip]  # Registrando a ação no admin
 
+class PortalConfigAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'is_open', 'updated_at')
+    list_editable = ('is_open',)
+    readonly_fields = ('updated_at',)
+    ordering = ('slug',)
+
 # Registrando os models no admin
 admin.site.register(Apartamento, ApartamentoAdmin)
 admin.site.register(Leitura, LeituraAdmin)
+admin.site.register(PortalConfig, PortalConfigAdmin)
 

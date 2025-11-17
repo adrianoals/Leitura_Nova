@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from imperial.models import Apartamento, Leitura
+from imperial.models import Apartamento, Leitura, PortalConfig
 from django.contrib import messages
 import datetime
 import os
@@ -10,7 +10,15 @@ import pandas as pd
 from django.views import View
 
 def imperial(request):
+    config = PortalConfig.get_solo()
     apartamentos = list(Apartamento.objects.all())  # Converte para lista imediatamente
+    context = {'apartamentos': apartamentos, 'is_portal_open': config.is_open}
+
+    if not config.is_open:
+        if request.method == 'POST':
+            messages.warning(request, 'O período de leituras para este condomínio está fechado no momento.')
+        return render(request, 'imperial/imperial.html', context)
+
     if request.method == 'POST':
         apartamento_id = request.POST.get('apartamento')
         valor_leitura = request.POST.get('valor_leitura')
@@ -30,7 +38,7 @@ def imperial(request):
                 foto_relogio=foto_relogio
             )
             messages.success(request, 'Leitura enviada com sucesso!')
-            return render(request, 'imperial/imperial.html', {'apartamentos': apartamentos})
+            return render(request, 'imperial/imperial.html', context)
         except Exception as e:
             from django.core.exceptions import ValidationError
             if isinstance(e, ValidationError) and hasattr(e, 'message') and e.message == 'duplicate_upload':
@@ -41,9 +49,9 @@ def imperial(request):
                 messages.warning(request, 'Você já enviou a foto deste mês. Não é necessário enviar novamente.')
             else:
                 messages.error(request, 'Erro ao registrar leitura. Por favor, tente novamente ou contate o suporte.')
-            return render(request, 'imperial/imperial.html', {'apartamentos': apartamentos})
+            return render(request, 'imperial/imperial.html', context)
 
-    return render(request, 'imperial/imperial.html', {'apartamentos': apartamentos})
+    return render(request, 'imperial/imperial.html', context)
 
 
 def imperial_download_photos(request):
